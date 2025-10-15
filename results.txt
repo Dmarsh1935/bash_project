@@ -1,0 +1,10 @@
+Password: 'weak' -> Weak
+Too short (length 5, min 8)
+Missing number
+Missing special character
+Password: 'Password123' -> Weak
+Missing special character
+Password: 'P@ssw0rd' -> Strong password
+Password: 'ThisIsASuperStrongPassword!' -> Weak
+Missing number
+SUMMARY: total=4, strong=1, weak=3, min_len=8
