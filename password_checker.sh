@@ -35,11 +35,38 @@ while getopts ":hm:f:o:v" opt; do
 done
 shift $((OPTIND-1))
 
+# --- Password Checking Logic ---
+check_password() {
+  local pwd="$1"
+  local fail_reasons=()
 
+  # 1. Length check
+  if (( ${#pwd} < MIN_LEN )); then
+    fail_reasons+=("Too short (length ${#pwd}, min $MIN_LEN)")
+  fi
 
+  # 2. Number check
+  if [[ ! "$pwd" =~ [0-9] ]]; then
+    fail_reasons+=("Missing number")
+  fi
 
+  # 3. Special character check
+  if [[ ! "$pwd" =~ [\@\#\$\%\^\&\*\!\_\+\=\-] ]]; then
+    fail_reasons+=("Missing special character")
+  fi
 
+  # Output result
+  if ((${#fail_reasons[@]})); then
+    echo "Password: '$pwd' → Weak"
+    for reason in "${fail_reasons[@]}"; do
+      echo "  - $reason"
+    done
+  else
+    echo "Password: '$pwd' → Strong password"
+  fi
+}
 
-
-
-
+# If a password is passed as an argument, check it
+if [[ -n "$1" ]]; then
+  check_password "$1"
+fi
